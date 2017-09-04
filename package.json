@@ -6,8 +6,10 @@
   "scripts": {
     "start:prod": "node .",
     "start:dev": "node-env-run -f .",
-    "start": "if-env NODE_ENV=production ?? npm run start:prod || npm run start:dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start":
+      "if-env NODE_ENV=production ?? npm run start:prod || npm run start:dev",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "ncp .env.example .env"
   },
   "repository": {
     "type": "git",
@@ -26,6 +28,7 @@
   },
   "devDependencies": {
     "if-env": "^1.0.0",
+    "ncp": "^2.0.0",
     "node-env-run": "^1.0.1"
   }
 }
