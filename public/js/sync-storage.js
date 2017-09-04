@@ -1,5 +1,5 @@
 /*jshint eqeqeq:false */
-(function (window) {
+(function(window) {
   'use strict';
 
   /**
@@ -11,7 +11,7 @@
    * real life you probably would be making AJAX calls
    */
   function Store(name, callback, eventHandler) {
-    callback = callback || function () {};
+    callback = callback || function() {};
 
     this._dbName = name;
 
@@ -63,7 +63,7 @@
    *	 // hello: world in their properties
    * });
    */
-  Store.prototype.find = function (query, callback) {
+  Store.prototype.find = function(query, callback) {
     if (!callback) {
       return;
     }
@@ -81,8 +81,8 @@
    *
    * @param {function} callback The callback to fire upon retrieving data
    */
-  Store.prototype.findAll = function (callback) {
-    callback = callback || function () {};
+  Store.prototype.findAll = function(callback) {
+    callback = callback || function() {};
     this._list.getItems().then(todos => {
       callback.call(this, todos.items.map(extractData));
     });
@@ -96,8 +96,8 @@
    * @param {function} callback The callback to fire after saving
    * @param {number} id An optional param to enter an ID of an item to update
    */
-  Store.prototype.save = function (updateData, callback, id) {
-    callback = callback || function () {};
+  Store.prototype.save = function(updateData, callback, id) {
+    callback = callback || function() {};
 
     if (typeof id !== 'undefined') {
       this._list
@@ -111,11 +111,13 @@
     } else {
       this._list.push(updateData).then(item => {
         updateData.id = item.index;
-        this._list.update(updateData.id, {
-          id: updateData.id
-        }).then(() => {
-          callback.call(this, [updateData]);
-        });
+        this._list
+          .update(updateData.id, {
+            id: updateData.id
+          })
+          .then(() => {
+            callback.call(this, [updateData]);
+          });
       });
     }
   };
@@ -126,7 +128,9 @@
    * @param {number} id The ID of the item you want to remove
    * @param {function} callback The callback to fire after saving
    */
-  Store.prototype.remove = function (id, callback) {
+  Store.prototype.remove = function(id, callback) {
+    callback = callback || function() {};
+
     this._list
       .remove(id)
       .then(() => {
@@ -142,7 +146,9 @@
    *
    * @param {function} callback The callback to fire after dropping the data
    */
-  Store.prototype.drop = function (callback) {
+  Store.prototype.drop = function(callback) {
+    callback = callback || function() {};
+
     const data = {
       todos: []
     };
@@ -164,7 +170,7 @@
   };
 
   function createFilterFunction(query) {
-    return function (todo) {
+    return function(todo) {
       for (let q in query) {
         if (query[q] !== todo[q]) {
           return false;
