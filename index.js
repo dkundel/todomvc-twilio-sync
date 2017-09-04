@@ -29,6 +29,6 @@ app.get('/token', (req, res) => {
   res.send({ token: accessToken.toJwt() });
 });
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
