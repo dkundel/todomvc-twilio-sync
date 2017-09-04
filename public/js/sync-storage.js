@@ -14,38 +14,6 @@
     callback = callback || function() {};
 
     this._dbName = name;
-
-    // START SYNC
-    fetch('/token')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Could not retrieve token');
-        }
-        return response.json();
-      })
-      .then(data => {
-        this._client = new Twilio.Sync.Client(data.token);
-        return this._client.list(name);
-      })
-      .then(list => {
-        this._list = list;
-        this._list.on('itemAdded', () => {
-          eventHandler();
-        });
-        this._list.on('itemUpdated', () => {
-          eventHandler();
-        });
-        this._list.on('itemRemoved', () => {
-          eventHandler();
-        });
-        return list.getItems();
-      })
-      .then(todos => {
-        callback.call(this, { todos: todos.items.map(extractData) });
-      })
-      .catch(err => {
-        console.error(err);
-      });
   }
 
   /**
@@ -65,13 +33,6 @@
     if (!callback) {
       return;
     }
-
-    this._list.getItems().then(todos => {
-      callback.call(
-        this,
-        todos.items.map(extractData).filter(createFilterFunction(query))
-      );
-    });
   };
 
   /**
@@ -81,9 +42,6 @@
    */
   Store.prototype.findAll = function(callback) {
     callback = callback || function() {};
-    this._list.getItems().then(todos => {
-      callback.call(this, todos.items.map(extractData));
-    });
   };
 
   /**
@@ -96,24 +54,6 @@
    */
   Store.prototype.save = function(updateData, callback, id) {
     callback = callback || function() {};
-
-    if (typeof id !== 'undefined') {
-      this._list
-        .update(id, updateData)
-        .then(item => {
-          return this._list.getItems();
-        })
-        .then(todos => {
-          callback.call(this, todos.items.map(extractData));
-        });
-    } else {
-      this._list.push(updateData).then(item => {
-        updateData.id = item.index;
-        this._list.update(updateData.id, { id: updateData.id }).then(() => {
-          callback.call(this, [updateData]);
-        });
-      });
-    }
   };
 
   /**
@@ -123,14 +63,7 @@
    * @param {function} callback The callback to fire after saving
    */
   Store.prototype.remove = function(id, callback) {
-    this._list
-      .remove(id)
-      .then(() => {
-        return this._list.getItems();
-      })
-      .then(todos => {
-        callback.call(this, todos.items.map(extractData));
-      });
+    callback = callback || function() {};
   };
 
   /**
@@ -139,38 +72,8 @@
    * @param {function} callback The callback to fire after dropping the data
    */
   Store.prototype.drop = function(callback) {
-    var data = { todos: [] };
-    localStorage[this._dbName] = JSON.stringify(data);
-    callback.call(this, data.todos);
-
-    this._list
-      .removeList()
-      .then(() => {
-        this._client.list(this._dbName);
-      })
-      .then(list => {
-        this._list = list;
-        return this._list.getItems();
-      })
-      .then(todos => {
-        callback.call(this, todos.items.map(extractData));
-      });
+    callback = callback || function() {};
   };
-
-  function createFilterFunction(query) {
-    return function(todo) {
-      for (var q in query) {
-        if (query[q] !== todo[q]) {
-          return false;
-        }
-      }
-      return true;
-    };
-  }
-
-  function extractData(todo) {
-    return todo.data.value;
-  }
 
   // Export to window
   window.app = window.app || {};
