@@ -8,27 +8,28 @@
    * @param {string} name The name of your new to do list.
    */
   function Todo(name) {
-    this.storage = new app.Store(
+    const self = this;
+    self.storage = new app.Store(
       name,
       items => {
-        console.log(items);
-        this.model = new app.Model(this.storage);
-        this.template = new app.Template();
-        this.view = new app.View(this.template);
-        this.controller = new app.Controller(this.model, this.view);
+        self.model = new app.Model(self.storage);
+        self.template = new app.Template();
+        self.view = new app.View(self.template);
+        self.controller = new app.Controller(self.model, self.view);
+
+        function setView() {
+          self.controller.setView(document.location.hash);
+        }
 
         $on(window, 'load', setView);
         $on(window, 'hashchange', setView);
         setView();
       },
       () => {
-        todo.controller._filter(true);
+        self.controller._filter(true);
       }
     );
   }
 
   var todo = new Todo('todos-twiliosync-bar');
-  function setView() {
-    todo.controller.setView(document.location.hash);
-  }
 })();
