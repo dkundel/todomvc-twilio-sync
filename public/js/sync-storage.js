@@ -15,6 +15,15 @@
 
     this._dbName = name;
   }
+  
+  /**
+   * Will retrieve all data from the collection
+   *
+   * @param {function} callback The callback to fire upon retrieving data
+   */
+  Store.prototype.findAll = function(callback) {
+    callback = callback || function() {};
+  };
 
   /**
    * Finds items based on a query given as a JS object
@@ -30,17 +39,6 @@
    * });
    */
   Store.prototype.find = function(query, callback) {
-    if (!callback) {
-      return;
-    }
-  };
-
-  /**
-   * Will retrieve all data from the collection
-   *
-   * @param {function} callback The callback to fire upon retrieving data
-   */
-  Store.prototype.findAll = function(callback) {
     callback = callback || function() {};
   };
 
