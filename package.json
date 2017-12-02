@@ -8,7 +8,9 @@
     "start:dev": "node-env-run -f .",
     "start": "if-env NODE_ENV=production ?? npm run start:prod || npm run start:dev",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "./bin/postinstall"
+    "postinstall": "./bin/postinstall",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -23,11 +25,13 @@
   "homepage": "https://github.com/dkundel/todomvc-twilio-sync#readme",
   "dependencies": {
     "express": "^4.15.3",
-    "twilio": "^3.5.0-alpha.1"
+    "twilio": "^3.5.0-alpha.1",
+    "snyk": "^1.52.1"
   },
   "devDependencies": {
     "if-env": "^1.0.0",
     "ncp": "^2.0.0",
     "node-env-run": "^1.0.1"
-  }
+  },
+  "snyk": true
 }
