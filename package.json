@@ -25,7 +25,7 @@
   "homepage": "https://github.com/dkundel/todomvc-twilio-sync#readme",
   "dependencies": {
     "express": "^4.15.3",
-    "twilio": "^3.5.0-alpha.1",
+    "twilio": "^3.16.0",
     "snyk": "^1.52.1"
   },
   "devDependencies": {
